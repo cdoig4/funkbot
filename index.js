@@ -65,7 +65,7 @@ async function execute(message, serverQueue) {
         return message.channel.send(`${song.title} has been added to the queue!`);
     }
     // Creating the contract for our queue
-    const queueContruct = {
+    const queueConstruct = {
         textChannel: message.channel,
         voiceChannel: voiceChannel,
         connection: null,
@@ -74,16 +74,16 @@ async function execute(message, serverQueue) {
         playing: true,
     };
     // Setting the queue using our contract
-    queue.set(message.guild.id, queueContruct);
+    queue.set(message.guild.id, queueConstruct);
     // Pushing the song to our songs array
-    queueContruct.songs.push(song);
+    queueConstruct.songs.push(song);
 
     try {
         // Here we try to join the voicechat and save our connection into our object.
         var connection = await voiceChannel.join();
-        queueContruct.connection = connection;
+        queueConstruct.connection = connection;
         // Calling the play function to start a song
-        play(message.guild, queueContruct.songs[0]);
+        play(message.guild, queueConstruct.songs[0]);
     } catch (err) {
         // Printing the error message if the bot fails to join the voicechat
         console.log(err);
@@ -92,3 +92,11 @@ async function execute(message, serverQueue) {
     }
 };
 
+function play(guild, song) {
+    const serverQueue = queue.get(guild.id);
+    if (!song) {
+        serverQueue.voiceChannel.leave();
+        queue.delete(guild.id);
+        return;
+    }
+};
