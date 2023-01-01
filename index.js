@@ -1,18 +1,14 @@
-// require('dotenv').config();
-// const Discord = require("discord.js");
-// const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
-// client.on("ready", () => {
-//     console.log(`Logged in as ${client.user.tag}!`)
-// })
-// client.on("message", msg => {
-//     if (msg.content === "ping") {
-//         msg.reply("pong");
-//     }
-// })
-// client.login(process.env.DISCORD_TOKEN);
-
-const Discord = require(“discord.js”);
-const { prefix, token } = require(“./config.json”);
-const ytdl = require(“ytdl - core”);
-const client = new Discord.Client();
+const { Client, Events, GatewayIntentBits } = require('discord.js');
+const { token } = require('./config.json');
+const dotenv = require('dotenv');
+const ytdl = require("ytdl-core");
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const queue = new Map();
+
+client.once(Events.ClientReady, c => {
+    console.log(`Ready! Logged in as ${c.user.tag}`);
+});
+
+
+
+client.login(token);
